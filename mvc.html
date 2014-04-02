@@ -1,0 +1,57 @@
+<script>
+    exports.controller = {
+        onInit: function() {
+            var self = this;
+            this.model = registry.model.get('deal');
+
+            this.model.subscribe('update', function(from) {
+                if (from !== self) {
+                    self.view.update();
+                }
+            });
+        },
+
+        submit: function() {
+            this.view.backfill();
+            this.model.put();
+        }
+    }
+
+    exports.view = {
+        onUpdate: function(controller, container) {
+
+        },
+
+        onBackfill: function(controller, container) {
+
+        },
+
+        onInit: function(controller, container) {
+            var model = controller.model;
+
+            this.bind(container, {
+                'form': {
+                    event: {
+                        submit: function() {
+                            controller.submit();
+                        }
+                    }
+                },
+
+                'input[name=name]': {
+                    value: [model, 'name']
+                },
+
+                'input[name=password]': {
+                    value: [model, 'password']
+                }
+            });
+        }
+    }
+</script>
+
+<form>
+    <input name="name"/>
+    <input name="password"/>
+    <button type="submit">submit</button>
+</form>
